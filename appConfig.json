@@ -1,0 +1,4 @@
+{
+  "environment": "DEVELOPMENT",
+  "apiBaseURL": "/api/v0/"
+}
