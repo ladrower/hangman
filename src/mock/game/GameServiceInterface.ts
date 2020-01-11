@@ -25,6 +25,9 @@ export interface GameServiceInterface {
 
   // guess a char
   guess(character: string, token: string): ServiceResponse<GameData | string>
+
+  // logout
+  checkout(token: string): ServiceResponse<null>
 }
 
 export const response = <T>(code: HTTPCode, data: T): ServiceResponse<T> => ({code, data})

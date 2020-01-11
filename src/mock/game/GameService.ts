@@ -114,9 +114,6 @@ export class GameService implements GameServiceInterface {
    */
   guess(character: string, token: string) {
     try {
-      if (character.length !== 1) {
-        return response(HTTPCode.Error, 'Only single character is accepted')
-      }
       const entry = this.getUserEntry(token)
       if (entry.game === null) {
         return response(HTTPCode.Error, 'Game has not been started')
@@ -124,6 +121,9 @@ export class GameService implements GameServiceInterface {
       const game = this.createGameModel(entry.game)
       if (game.getState().gameOver) {
         return response(HTTPCode.Error, 'Game was over. Please start a new one')
+      }
+      if (character.length !== 1) {
+        return response(HTTPCode.Error, 'Only single character is accepted')
       }
 
       game.guess(character)
@@ -154,6 +154,15 @@ export class GameService implements GameServiceInterface {
     } catch (e) {
       return GameService.errorResponse(e)
     }
+  }
+
+  /**
+   * POST
+   * @param token
+   */
+  checkout(token: string) {
+    this.storage.removeItem(token)
+    return response(HTTPCode.OK, null)
   }
 
   private getUserEntry(token: string) {

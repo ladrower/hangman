@@ -22,10 +22,7 @@ export default {
       switch (path) {
         case '/game': {
           const { code, data } = api.getGame(token)
-          if (code === HTTPCode.OK) {
-            return responseSuccess(data)
-          }
-          return responseError(data, code, config)
+          return response(code, data, config)
         }
         default:
           throw new Error(`No mock provided for the path ${path}`)
@@ -41,24 +38,19 @@ export default {
       switch (path) {
         case '/checkin': {
           const { code, data } = api.checkin(payload.userName)
-          if (code === HTTPCode.OK) {
-            return responseSuccess(data)
-          }
-          return responseError(data, code, config)
+          return response(code, data, config)
         }
         case '/game': {
           const { code, data } = api.postGame(token)
-          if (code === HTTPCode.OK) {
-            return responseSuccess(data)
-          }
-          return responseError(data, code, config)
+          return response(code, data, config)
         }
         case '/guess': {
           const { code, data } = api.guess(payload.character, token)
-          if (code === HTTPCode.OK) {
-            return responseSuccess(data)
-          }
-          return responseError(data, code, config)
+          return response(code, data, config)
+        }
+        case '/checkout': {
+          const { code, data } = api.checkout(token)
+          return response(code, data, config)
         }
         default:
           throw new Error(`No mock provided for the path ${path}`)
@@ -77,6 +69,13 @@ export default {
         config.headers.Authorization = overrideAuth
       }
       return config
+    }
+
+    function response<T>(code: HTTPCode, data: T, config: AxiosRequestConfig) {
+      if (code === HTTPCode.OK) {
+        return responseSuccess(data)
+      }
+      return responseError(data, code, config)
     }
 
     function responseSuccess<T>(data: T) {

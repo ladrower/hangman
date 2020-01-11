@@ -1,16 +1,16 @@
-import { action, computed, observable, when } from 'mobx'
+import { action, computed, observable, reaction } from 'mobx'
 import { store } from '@/infrastructure/store/store'
 import { AxiosError } from 'axios'
 import { WebStorage } from '@/infrastructure/WebStorage'
 import { HttpReader, IResource } from '@/infrastructure/resource'
 import { HttpClient } from '@/infrastructure/http/HttpClient'
-import {auth} from '@/app/Auth/requests/auth';
+import { login } from '@/app/Auth/requests/login';
+import { logout } from '@/app/Auth/requests/logout';
 
 @store
 export class AuthStore {
   @observable private authToken: string | null = null
   @observable private resource: IResource<{token: string}> = {}
-  private disposeAuthResource: () => void = () => null
 
   constructor(
     private http: HttpClient,
@@ -62,15 +62,17 @@ export class AuthStore {
   }
 
   @action login(userName: string) {
-    this.disposeAuthResource()
-    this.resource = this.httpReader.read(auth(userName))
-    this.disposeAuthResource = when(() => !this.resource.loading, () =>
-        this.resource.data && this.setToken(this.resource.data.token)
-    )
+    this.resource = this.httpReader.read(login(userName))
+    reaction(() => this.resource.data || this.resource, (_, subscription) => {
+      const { data } = this.resource
+      subscription.dispose()
+      return data && this.setToken(data.token)
+    })
   }
 
   @action logout() {
-    this.disposeAuthResource()
+    this.httpReader.read(logout())
+    this.resource = {}
     this.setToken(null)
   }
 }
