@@ -4,6 +4,7 @@ import { AxiosError } from 'axios'
 import { WebStorage } from '@/infrastructure/WebStorage'
 import { HttpReader, IResource } from '@/infrastructure/resource'
 import { HttpClient } from '@/infrastructure/http/HttpClient'
+import {auth} from '@/app/Auth/requests/auth';
 
 @store
 export class AuthStore {
@@ -60,24 +61,16 @@ export class AuthStore {
     this.authToken = token
   }
 
-  @action async login(userName: string) {
+  @action login(userName: string) {
     this.disposeAuthResource()
-    this.resource = this.httpReader.read(http =>
-      http.post<{token: string}>(`/checkin`, { userName }))
-
-    return new Promise<string>((resolve, reject) => {
-      this.disposeAuthResource = when(() => !this.resource.loading, () => {
-        const { data, error } = this.resource
-        if (data) {
-          resolve(data.token)
-        } else {
-          reject(error)
-        }
-      })
-    }).then(token => this.setToken(token))
+    this.resource = this.httpReader.read(auth(userName))
+    this.disposeAuthResource = when(() => !this.resource.loading, () =>
+        this.resource.data && this.setToken(this.resource.data.token)
+    )
   }
 
   @action logout() {
+    this.disposeAuthResource()
     this.setToken(null)
   }
 }

@@ -1,11 +1,9 @@
 import { action, computed, observable, when } from 'mobx'
 import { store } from '@/infrastructure/store/store'
-import { HttpReader, IResource } from '@/infrastructure/resource'
+import { HttpReader, HttpRequest, IResource } from '@/infrastructure/resource'
 import { GameData } from '@/mock/game/GameServiceInterface'
 import { loadGame } from '@/app/Play/requests/loadGame'
 import { guess } from '@/app/Play/requests/guess'
-import { HttpService } from '@/infrastructure/http/HttpClient'
-import { AxiosResponse } from 'axios'
 
 @store
 export class PlayStore {
@@ -33,7 +31,7 @@ export class PlayStore {
   @action loadGame = (override = false) =>
     this.updateGameResource(loadGame(override))
 
-  private updateGameResource(request: (http: HttpService) => Promise<AxiosResponse<GameData>>) {
+  private updateGameResource(request: HttpRequest<GameData>) {
     this.disposeGameResource()
     this.error = ''
     this.gameResource = this.httpReader.read(request)

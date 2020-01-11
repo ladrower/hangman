@@ -5,6 +5,9 @@ import { observable, runInAction } from 'mobx'
 import { IResource } from '@/infrastructure/resource'
 
 export interface IHttpResource<T> extends IResource<T, AxiosError<T>> {}
+export interface HttpRequest<T> {
+  (http: HttpService): Promise<AxiosResponse<T>>
+}
 
 @injectable
 export class HttpReader {
@@ -12,7 +15,7 @@ export class HttpReader {
     private http: HttpClient
   ) { }
 
-  read<T>(request: (http: HttpService) => Promise<AxiosResponse<T>>): IHttpResource<T> {
+  read<T>(request: HttpRequest<T>): IHttpResource<T> {
     const result = observable.object<{
       response?: {
         data?: T,
