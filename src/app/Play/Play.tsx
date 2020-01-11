@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+import Skeleton from '@material-ui/lab/Skeleton';
+import Alert from '@material-ui/lab/Alert'
 import { Button, Card, CardContent, Fab, Box, Grid, Chip, LinearProgress, Divider, Typography } from '@material-ui/core'
-import { Skeleton, Alert } from '@material-ui/lab';
 import { Layout } from '@/app/components/Layout/Layout'
 import { data as chars } from '@/mock/data/characters.json'
 import { observe, useStore } from '@/infrastructure/store'
