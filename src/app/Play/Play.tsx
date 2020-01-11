@@ -64,7 +64,7 @@ export function Play() {
             <Button
               disabled={busy}
               onClick={() => playStore.loadGame(true)}
-              variant='outlined'
+              variant={game && game.gameOver ? 'contained' : 'outlined'}
               color='primary'>
               Load new word
             </Button>
