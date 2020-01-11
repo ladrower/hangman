@@ -51,4 +51,5 @@ The Store API is covered with basic unit tests - https://github.com/ladrower/han
 Communication with a backend is implemented using HttpReader service that synchronously returns an observable resource (IHttpResource) - https://github.com/ladrower/hangman/blob/master/src/infrastructure/resource/HttpReader.ts
 
 This approach eliminates the issue with requests cancellation, because we literally forget about any previous resourse and override it with a new one synchronously allowing the former one to be garbage collected since no one has a closure with it.
+https://github.com/ladrower/hangman/blob/master/src/app/Play/PlayStore.ts#L45
 
