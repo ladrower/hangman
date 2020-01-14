@@ -1,5 +1,5 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import React from 'react'
+import renderer from 'react-test-renderer'
 import { LoadingIndicator } from '../LoadingIndicator'
 
 const Spinner = () => <div>spinner...</div>
