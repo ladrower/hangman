@@ -44,7 +44,7 @@
   "dependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/lab": "^4.0.0-alpha.39",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "history": "^4.10.1",
     "mobx": "^4.9.4",
